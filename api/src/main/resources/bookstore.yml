@@ -1,0 +1,245 @@
+openapi: "3.0.3"
+info:
+  description: "Simple API for bookstore"
+  version: "1.0.0"
+  title: "Simple bookstore API"
+tags:
+  - name: "books"
+    description: "Operations regarding books"
+  - name: "orders"
+    description: "Operations regarding orders"
+paths:
+  /bookservice/books:
+    get:
+      tags:
+        - "books"
+      summary: "Returns the list of all books"
+      responses:
+        "200":
+          description: "List of all books"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookModels"
+              examples:
+                BookModelsExample:
+                  $ref: "#/components/examples/BookModelsExample"
+  /orderservice/orders:
+    get:
+      tags:
+        - "orders"
+      summary: "Returns the list of authenticated customer's orders"
+      responses:
+        "200":
+          description: "List of authenticated customer's orders:"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderModels"
+              examples:
+                OrderExample:
+                  $ref: "#/components/examples/OrderModelsExample"
+    post:
+      tags:
+        - "orders"
+      summary: "Creates and order from cart"
+      requestBody:
+        description: "Cart model"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CartModel"
+            examples:
+              CartModelExample:
+                $ref: "#/components/examples/CartModelExample"
+      responses:
+        "200":
+          description: "Order created from cart"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderModel"
+              examples:
+                OrderModelExample:
+                  $ref: "#/components/examples/OrderModelExample"
+        "400":
+          description: "The cart is empty or not enough balance"
+  /orderservice/orders/{orderId}:
+    get:
+      tags:
+        - "orders"
+      summary: "Returns the order of authenticated customer"
+      parameters:
+        - name: "orderId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "Order with given ID"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderModel"
+              examples:
+                OrderModelExample:
+                  $ref: "#/components/examples/OrderModelExample"
+        "403":
+          description: "The order exists but does not belong to the authenticated customer"
+        "404":
+          description: "The order does not exist"
+components:
+  examples:
+    BookModelsExample:
+      value:
+        - id: "1"
+          title: "Harry Potter 1 and the Philosopher's Stone"
+          author: "J. K. Rowling"
+          description: "Harry Potter"
+          genre: "FANTASY"
+          isbn10: "9781408855652"
+          isbn13: "978-1408855652"
+          price: "38.00"
+        - id: "2"
+          title: "Harry Potter 2 and the Chamber of Secrets"
+          author: "J. K. Rowling"
+          description: "Harry Potter"
+          genre: "FANTASY"
+          isbn10: "1408855666"
+          isbn13: "978-1408855904"
+          price: "56.42"
+    CartModelExample:
+      value:
+        price: "38.00"
+        orderItemModels:
+          - id: "1"
+            bookModel:
+              id: "1"
+              title: "Harry Potter 1 and the Philosopher's Stone"
+              author: "J. K. Rowling"
+              description: "Harry Potter"
+              isbn10: "9781408855652"
+              isbn13: "978-1408855652"
+              price: "38.00"
+            amount: "1"
+            price: "38.00"
+    OrderModelExample:
+      value:
+        id: "1"
+        price: "38.00"
+        timestampCreated: "23-10-2022 19:49:30"
+        orderItemModels:
+          - id: "1"
+            bookModel:
+              id: "1"
+              title: "Harry Potter 1 and the Philosopher's Stone"
+              author: "J. K. Rowling"
+              description: "Harry Potter"
+              genre: "FANTASY"
+              isbn10: "9781408855652"
+              isbn13: "978-1408855652"
+              price: "38.00"
+            amount: "1"
+            price: "38.00"
+    OrderModelsExample:
+      value:
+        - id: "1"
+          price: "38.00"
+          timestampCreated: "23-10-2022 19:49:30"
+          orderItemModels:
+            - id: "1"
+              bookModel:
+                id: "1"
+                title: "Harry Potter 1 and the Philosopher's Stone"
+                author: "J. K. Rowling"
+                description: "Harry Potter"
+                genre: "FANTASY"
+                isbn10: "9781408855652"
+                isbn13: "978-1408855652"
+                price: "38.00"
+              amount: "1"
+              price: "38.00"
+
+  schemas:
+    BookModel:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+          description: "ID of book"
+        title:
+          type: "string"
+          description: "title of book"
+        author:
+          type: "string"
+          description: "author of book"
+        description:
+          type: "string"
+          description: "description of book"
+        genre:
+          type: "string"
+          description: "genre of book"
+        isbn10:
+          type: "string"
+          description: "ISBN10 number of the book"
+        isbn13:
+          type: "string"
+          description: "ISBN13 number of the book"
+        price:
+          type: "number"
+          description: "price of the book"
+    BookModels:
+      type: "array"
+      items:
+        $ref: "#/components/schemas/BookModel"
+    OrderItemModel:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+          description: "ID of orderItem"
+        bookModel:
+          $ref: "#/components/schemas/BookModel"
+        amount:
+          type: "string"
+          description: "amount of orderItem"
+        price:
+          type: "string"
+          description: "price of orderItem"
+    OrderItemModels:
+      type: "array"
+      items:
+        $ref: "#/components/schemas/OrderItemModel"
+    OrderModel:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+          description: "id of order"
+        price:
+          type: "string"
+          description: "price of order"
+        timestampCreated:
+          type: "string"
+          description: "timestamp of order"
+        orderItemModels:
+          $ref: "#/components/schemas/OrderItemModels"
+    OrderModels:
+      type: "array"
+      items:
+        $ref: "#/components/schemas/OrderModel"
+    CartModel:
+      type: "object"
+      properties:
+        price:
+          type: "string"
+          description: "price of cart"
+        orderItemModels:
+          $ref: "#/components/schemas/OrderItemModels"
+
