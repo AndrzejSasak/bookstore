@@ -12,23 +12,23 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "CATEGORY")
-    private Category category;
-
     @Column(name = "TITLE")
     private String title;
 
+    @Column(name = "AUTHOR")
+    private String author;
+
     @Column(name = "DESCRIPTION")
     private String description;
+
+    @Column(name = "BOOK_GENRE")
+    private BookGenre bookGenre;
 
     @Column(name = "ISBN10")
     private String isbn10;
 
     @Column(name = "ISBN13")
     private String isbn13;
-
-    @Column(name = "PUBLISHER")
-    private String publisher;
 
     @Column(name = "DATE_OF_PUBLICATION")
     private LocalDate dateOfPublication;

@@ -22,6 +22,6 @@ public class Customer extends User {
     private List<Order> orders;
 
     @Transient
-    private Cart cart;
+    private ShoppingCart shoppingCart;
 
 }
