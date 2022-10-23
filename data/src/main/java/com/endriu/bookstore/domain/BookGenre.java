@@ -1,6 +1,6 @@
 package com.endriu.bookstore.domain;
 
-public enum Category {
+public enum BookGenre {
     FANTASY,
     SCI_FI,
     DYSTOPIAN,
