@@ -1,10 +1,17 @@
 package com.endriu.bookstore.domain;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "ORDER_ITEM")
+@Builder
+@Getter
+@Setter
 public class OrderItem {
 
     @Id

@@ -1,5 +1,9 @@
 package com.endriu.bookstore.domain;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -7,6 +11,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "_ORDER")
+@Builder
+@Getter
+@Setter
 public class Order {
 
     @Id

@@ -1,11 +1,18 @@
 package com.endriu.bookstore.domain;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "BOOK")
+@Builder
+@Getter
+@Setter
 public class Book {
 
     @Id
