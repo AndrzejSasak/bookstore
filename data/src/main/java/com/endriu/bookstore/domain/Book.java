@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 @Builder
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Book {
 
     @Id
@@ -25,6 +27,7 @@ public class Book {
     @Column(name = "DESCRIPTION")
     private String description;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "GENRE")
     private Genre genre;
 
