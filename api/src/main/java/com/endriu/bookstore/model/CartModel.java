@@ -1,5 +1,6 @@
 package com.endriu.bookstore.model;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Objects;
 import com.endriu.bookstore.model.OrderItemModel;
@@ -25,13 +26,13 @@ import javax.annotation.Generated;
 public class CartModel {
 
   @JsonProperty("price")
-  private String price;
+  private BigDecimal price;
 
   @JsonProperty("orderItemModels")
   @Valid
   private List<OrderItemModel> orderItemModels = null;
 
-  public CartModel price(String price) {
+  public CartModel price(BigDecimal price) {
     this.price = price;
     return this;
   }
@@ -42,11 +43,11 @@ public class CartModel {
   */
   
   @Schema(name = "price", description = "price of cart", required = false)
-  public String getPrice() {
+  public BigDecimal getPrice() {
     return price;
   }
 
-  public void setPrice(String price) {
+  public void setPrice(BigDecimal price) {
     this.price = price;
   }
 
