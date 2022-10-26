@@ -2,9 +2,10 @@ package com.endriu.bookstore.converter;
 
 import com.endriu.bookstore.domain.Order;
 import com.endriu.bookstore.model.OrderModel;
+import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 
+@Component
 public class DefaultOrderConverter implements OrderConverter {
 
     private final OrderItemConverter orderItemConverter;
@@ -15,13 +16,13 @@ public class DefaultOrderConverter implements OrderConverter {
 
     @Override
     public OrderModel convertToOrderModel(Order order) {
-        OrderModel orderModel = new OrderModel();
-        orderModel.price(order.getPrice());
-        orderModel.timestampCreated(order.getTimestampCreated().toString());
-        orderModel.orderItemModels(order.getOrderItems().stream()
-                .map(orderItemConverter::convertToOrderItemModel)
-                .toList());
-        return null;
+        return new OrderModel()
+                .id(order.getId())
+                .price(order.getPrice())
+                .timestampCreated(order.getTimestampCreated().toString())
+                .orderItemModels(order.getOrderItems().stream()
+                        .map(orderItemConverter::convertToOrderItemModel)
+                        .toList());
     }
 
 }

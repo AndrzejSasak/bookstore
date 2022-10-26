@@ -3,7 +3,9 @@ package com.endriu.bookstore.converter;
 import com.endriu.bookstore.domain.OrderItem;
 import com.endriu.bookstore.model.OrderItemModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DefaultOrderItemConverter implements OrderItemConverter {
 
     private final BookConverter bookConverter;
@@ -15,17 +17,17 @@ public class DefaultOrderItemConverter implements OrderItemConverter {
 
     @Override
     public OrderItemModel convertToOrderItemModel(OrderItem orderItem) {
-        OrderItemModel orderItemModel = new OrderItemModel();
-        orderItemModel.amount(String.valueOf(orderItem.getAmount()));
-        orderItemModel.price(orderItem.getPrice());
-        orderItemModel.bookModel(bookConverter.convertToBookModel(orderItem.getBook()));
-
-        return orderItemModel;
+        return new OrderItemModel()
+                .id(orderItem.getId())
+                .amount(String.valueOf(orderItem.getAmount()))
+                .price(orderItem.getPrice())
+                .bookModel(bookConverter.convertToBookModel(orderItem.getBook()));
     }
 
     @Override
     public OrderItem convertToOrderItem(OrderItemModel orderItemModel) {
         return OrderItem.builder()
+                .id(orderItemModel.getId())
                 .amount(Integer.parseInt(orderItemModel.getAmount()))
                 .price(orderItemModel.getPrice())
                 .book(bookConverter.convertToBook(orderItemModel.getBookModel()))

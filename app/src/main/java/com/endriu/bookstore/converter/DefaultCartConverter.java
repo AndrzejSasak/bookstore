@@ -2,7 +2,9 @@ package com.endriu.bookstore.converter;
 
 import com.endriu.bookstore.domain.ShoppingCart;
 import com.endriu.bookstore.model.CartModel;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DefaultCartConverter implements CartConverter {
 
     private final OrderItemConverter orderItemConverter;
@@ -13,13 +15,11 @@ public class DefaultCartConverter implements CartConverter {
 
     @Override
     public CartModel convertToCartModel(ShoppingCart shoppingCart) {
-        CartModel cartModel = new CartModel();
-        cartModel.price(shoppingCart.getPrice());
-        cartModel.orderItemModels(shoppingCart.getOrderItems().stream()
-                .map(orderItemConverter::convertToOrderItemModel)
-                .toList());
-
-        return cartModel;
+        return new CartModel()
+                .price(shoppingCart.getPrice())
+                .orderItemModels(shoppingCart.getOrderItems().stream()
+                        .map(orderItemConverter::convertToOrderItemModel)
+                        .toList());
     }
 
     @Override
