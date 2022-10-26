@@ -209,7 +209,7 @@ components:
           type: "string"
           description: "amount of orderItem"
         price:
-          type: "string"
+          type: "number"
           description: "price of orderItem"
     OrderItemModels:
       type: "array"
@@ -223,7 +223,7 @@ components:
           format: "int64"
           description: "id of order"
         price:
-          type: "string"
+          type: "number"
           description: "price of order"
         timestampCreated:
           type: "string"
@@ -238,7 +238,7 @@ components:
       type: "object"
       properties:
         price:
-          type: "string"
+          type: "number"
           description: "price of cart"
         orderItemModels:
           $ref: "#/components/schemas/OrderItemModels"
