@@ -1,21 +1,17 @@
 package com.endriu.bookstore.model;
 
 import java.math.BigDecimal;
-import java.net.URI;
 import java.util.Objects;
-import com.endriu.bookstore.model.OrderItemModel;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.openapitools.jackson.nullable.JsonNullable;
-import java.time.OffsetDateTime;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 
 
-import java.util.*;
 import javax.annotation.Generated;
 
 /**
@@ -23,7 +19,7 @@ import javax.annotation.Generated;
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-10-23T20:38:24.048672300+02:00[Europe/Warsaw]")
-public class CartModel {
+public class ShoppingCartModel {
 
   @JsonProperty("price")
   private BigDecimal price;
@@ -32,7 +28,7 @@ public class CartModel {
   @Valid
   private List<OrderItemModel> orderItemModels = null;
 
-  public CartModel price(BigDecimal price) {
+  public ShoppingCartModel price(BigDecimal price) {
     this.price = price;
     return this;
   }
@@ -51,12 +47,12 @@ public class CartModel {
     this.price = price;
   }
 
-  public CartModel orderItemModels(List<OrderItemModel> orderItemModels) {
+  public ShoppingCartModel orderItemModels(List<OrderItemModel> orderItemModels) {
     this.orderItemModels = orderItemModels;
     return this;
   }
 
-  public CartModel addOrderItemModelsItem(OrderItemModel orderItemModelsItem) {
+  public ShoppingCartModel addOrderItemModelsItem(OrderItemModel orderItemModelsItem) {
     if (this.orderItemModels == null) {
       this.orderItemModels = new ArrayList<>();
     }
@@ -86,9 +82,9 @@ public class CartModel {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    CartModel cartModel = (CartModel) o;
-    return Objects.equals(this.price, cartModel.price) &&
-        Objects.equals(this.orderItemModels, cartModel.orderItemModels);
+    ShoppingCartModel shoppingCartModel = (ShoppingCartModel) o;
+    return Objects.equals(this.price, shoppingCartModel.price) &&
+        Objects.equals(this.orderItemModels, shoppingCartModel.orderItemModels);
   }
 
   @Override

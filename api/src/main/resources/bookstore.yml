@@ -42,20 +42,20 @@ paths:
     post:
       tags:
         - "orders"
-      summary: "Creates and order from cart"
+      summary: "Creates and order from shopping cart"
       requestBody:
-        description: "Cart model"
+        description: "Shopping cart model"
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CartModel"
+              $ref: "#/components/schemas/ShoppingCartModel"
             examples:
-              CartModelExample:
-                $ref: "#/components/examples/CartModelExample"
+              ShoppingCartModel:
+                $ref: "#/components/examples/ShoppingCartModelExample"
       responses:
         "200":
-          description: "Order created from cart"
+          description: "Order created from shopping cart"
           content:
             application/json:
               schema:
@@ -64,7 +64,7 @@ paths:
                 OrderModelExample:
                   $ref: "#/components/examples/OrderModelExample"
         "400":
-          description: "The cart is empty or not enough balance"
+          description: "The shopping cart is empty or not enough balance"
   /orderservice/orders/{orderId}:
     get:
       tags:
@@ -111,21 +111,21 @@ components:
           isbn10: "1408855666"
           isbn13: "978-1408855904"
           price: "56.42"
-    CartModelExample:
+    ShoppingCartModelExample:
       value:
         price: "38.00"
         orderItemModels:
-          - id: "1"
-            bookModel:
-              id: "1"
-              title: "Harry Potter 1 and the Philosopher's Stone"
-              author: "J. K. Rowling"
-              description: "Harry Potter"
-              isbn10: "9781408855652"
-              isbn13: "978-1408855652"
-              price: "38.00"
-            amount: "1"
+          bookModel:
+            id: "1"
+            title: "Harry Potter 1 and the Philosopher's Stone"
+            author: "J. K. Rowling"
+            description: "Harry Potter"
+            genre: "FANTASY"
+            isbn10: "9781408855652"
+            isbn13: "978-1408855652"
             price: "38.00"
+          amount: "1"
+          price: "38.00"
     OrderModelExample:
       value:
         id: "1"
@@ -211,10 +211,25 @@ components:
         price:
           type: "number"
           description: "price of orderItem"
+    OrderItemNoIdModel:
+      type: "object"
+      properties:
+        bookModel:
+          $ref: "#/components/schemas/BookModel"
+        amount:
+          type: "string"
+          description: "amount of orderItem"
+        price:
+          type: "number"
+          description: "price of orderItem"
     OrderItemModels:
       type: "array"
       items:
         $ref: "#/components/schemas/OrderItemModel"
+    OrderItemNoIdModels:
+      type: "array"
+      items:
+        $ref: "#/components/schemas/OrderItemNoIdModel"
     OrderModel:
       type: "object"
       properties:
@@ -234,12 +249,12 @@ components:
       type: "array"
       items:
         $ref: "#/components/schemas/OrderModel"
-    CartModel:
+    ShoppingCartModel:
       type: "object"
       properties:
         price:
           type: "number"
-          description: "price of cart"
+          description: "price of shopping cart"
         orderItemModels:
-          $ref: "#/components/schemas/OrderItemModels"
+          $ref: "#/components/schemas/OrderItemNoIdModels"
 
