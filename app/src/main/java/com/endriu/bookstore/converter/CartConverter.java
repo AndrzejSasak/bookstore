@@ -1,12 +1,12 @@
 package com.endriu.bookstore.converter;
 
 import com.endriu.bookstore.domain.ShoppingCart;
-import com.endriu.bookstore.model.CartModel;
+import com.endriu.bookstore.model.ShoppingCartModel;
 
 public interface CartConverter {
 
-    CartModel convertToCartModel(ShoppingCart shoppingCart);
-    ShoppingCart convertToCart(CartModel cartModel);
+    ShoppingCartModel convertToCartModel(ShoppingCart shoppingCart);
+    ShoppingCart convertToCart(ShoppingCartModel shoppingCartModel);
 
 }
 
