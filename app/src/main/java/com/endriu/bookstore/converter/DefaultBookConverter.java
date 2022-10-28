@@ -31,7 +31,7 @@ public class DefaultBookConverter implements BookConverter {
                 .description(bookModel.getDescription())
                 .genre(Genre.valueOf(bookModel.getGenre()))
                 .isbn10(bookModel.getIsbn10())
-                .isbn10(bookModel.getIsbn13())
+                .isbn13(bookModel.getIsbn13())
                 .price(bookModel.getPrice())
                 .build();
     }
