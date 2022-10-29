@@ -5,32 +5,24 @@
  */
 package com.endriu.bookstore.api;
 
-import com.endriu.bookstore.model.CartModel;
+import com.endriu.bookstore.model.ShoppingCartModel;
 import com.endriu.bookstore.model.OrderModel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-10-23T20:38:24.048672300+02:00[Europe/Warsaw]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen",
+        date = "2022-10-23T20:38:24.048672300+02:00[Europe/Warsaw]")
 @Validated
 @Tag(name = "orderservice", description = "Operations regarding orders")
 public interface OrderserviceApi {
@@ -76,7 +68,10 @@ public interface OrderserviceApi {
             @ApiResponse(responseCode = "200", description = "Order with given ID", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = OrderModel.class))
             }),
-            @ApiResponse(responseCode = "403", description = "The order exists but does not belong to the authenticated customer"),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "The order exists but does not belong to the authenticated customer"
+            ),
             @ApiResponse(responseCode = "404", description = "The order does not exist")
         }
     )
@@ -93,7 +88,7 @@ public interface OrderserviceApi {
     /**
      * POST /orderservice/orders : Creates and order from cart
      *
-     * @param cartModel Cart model (required)
+     * @param shoppingCartModel Cart model (required)
      * @return Order created from cart (status code 200)
      *         or The cart is empty or not enough balance (status code 400)
      */
@@ -115,7 +110,8 @@ public interface OrderserviceApi {
         consumes = { "application/json" }
     )
     ResponseEntity<OrderModel> orderserviceOrdersPost(
-        @Parameter(name = "CartModel", description = "Cart model", required = true) @Valid @RequestBody CartModel cartModel
+        @Parameter(name = "CartModel", description = "Cart model", required = true)
+        @Valid @RequestBody ShoppingCartModel shoppingCartModel
     );
 
 }
