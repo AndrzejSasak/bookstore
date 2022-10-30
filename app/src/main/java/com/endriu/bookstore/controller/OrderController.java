@@ -1,7 +1,7 @@
 package com.endriu.bookstore.controller;
 
 import com.endriu.bookstore.api.OrderserviceApi;
-import com.endriu.bookstore.converter.CartConverter;
+import com.endriu.bookstore.converter.ShoppingCartConverter;
 import com.endriu.bookstore.converter.OrderConverter;
 import com.endriu.bookstore.domain.Customer;
 import com.endriu.bookstore.domain.Order;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Controller
@@ -27,17 +26,16 @@ public class OrderController implements OrderserviceApi {
     private final CustomerService customerService;
     private final OrderConverter orderConverter;
     private final OrderService orderService;
-    private final CartConverter cartConverter;
+    private final ShoppingCartConverter shoppingCartConverter;
 
-    @Autowired
     public OrderController(CustomerService customerService,
                            OrderConverter orderConverter,
                            OrderService orderService,
-                           CartConverter cartConverter) {
+                           ShoppingCartConverter shoppingCartConverter) {
         this.customerService = customerService;
         this.orderConverter = orderConverter;
         this.orderService = orderService;
-        this.cartConverter = cartConverter;
+        this.shoppingCartConverter = shoppingCartConverter;
     }
 
     @Override
@@ -48,38 +46,40 @@ public class OrderController implements OrderserviceApi {
     @Override
     public ResponseEntity<OrderModel> orderserviceOrdersOrderIdGet(@PathVariable Long orderId) {
 
-        Order existingOrder;
-        try {
-            existingOrder = orderService.getOrderById(orderId);
-        } catch(EntityNotFoundException entityNotFoundException) {
+        if(!orderService.existsById(orderId)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        if(!getCurrentCustomer().getId().equals(existingOrder.getCustomer().getId())) {
+        if(orderBelongsToDifferentCustomer(orderService.getOrderById(orderId))) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        OrderModel orderModel = orderConverter.convertToOrderModel(findOrderOfAuthenticatedCustomer(orderId));
-        return new ResponseEntity<>(orderModel, HttpStatus.OK);
+        return new ResponseEntity<>(getOrderModelFromId(orderId), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<OrderModel> orderserviceOrdersPost(@RequestBody ShoppingCartModel shoppingCartModel) {
 
-        System.out.println(shoppingCartModel);
-
         Customer customer = getCurrentCustomer();
-        customer.setShoppingCart(cartConverter.convertToCart(shoppingCartModel));
+        customer.setShoppingCart(shoppingCartConverter.convertToCart(shoppingCartModel));
 
-        System.out.println(customer.getShoppingCart());
-
-        if(!customer.hasOrderItemsInCart() || !customer.hasEnoughBalance()) {
+        if(customer.hasEmptyShoppingCart() || customer.hasLowBalance()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        OrderModel orderModel = orderConverter.convertToOrderModel(orderService.createOrder(customer));
+        return new ResponseEntity<>(createOrderModel(customer), HttpStatus.OK);
+    }
 
-        return new ResponseEntity<>(orderModel, HttpStatus.OK);
+    private OrderModel createOrderModel(Customer customer) {
+        return orderConverter.convertToOrderModel(orderService.createOrder(customer));
+    }
+
+    private OrderModel getOrderModelFromId(Long orderId) {
+        return orderConverter.convertToOrderModel(findOrderOfAuthenticatedCustomer(orderId));
+    }
+
+    private boolean orderBelongsToDifferentCustomer(Order order) {
+        return !getCurrentCustomer().getId().equals(order.getCustomer().getId());
     }
 
     private Order findOrderOfAuthenticatedCustomer(Long orderId) {
@@ -95,10 +95,10 @@ public class OrderController implements OrderserviceApi {
     }
 
     private Customer getCurrentCustomer() {
-        User user = (User) SecurityContextHolder.getContext()
+        User currentCustomer = (User) SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getPrincipal();
 
-        return customerService.findCustomerByEmail(user.getUsername());
+        return customerService.findCustomerByEmail(currentCustomer.getUsername());
     }
 }

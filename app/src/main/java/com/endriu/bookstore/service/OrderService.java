@@ -7,5 +7,6 @@ public interface OrderService {
 
     Order createOrder(Customer customer);
     Order getOrderById(Long id);
+    boolean existsById(Long id);
 
 }

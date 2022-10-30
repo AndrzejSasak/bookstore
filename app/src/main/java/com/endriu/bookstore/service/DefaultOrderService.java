@@ -3,11 +3,10 @@ package com.endriu.bookstore.service;
 import com.endriu.bookstore.domain.Customer;
 import com.endriu.bookstore.domain.Order;
 import com.endriu.bookstore.domain.OrderItem;
-import com.endriu.bookstore.domain.ShoppingCart;
 import com.endriu.bookstore.repository.CustomerRepository;
-import com.endriu.bookstore.repository.OrderItemRepository;
 import com.endriu.bookstore.repository.OrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.endriu.bookstore.service.exception.EmptyShoppingCartException;
+import com.endriu.bookstore.service.exception.NotEnoughFundsException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -26,30 +25,13 @@ public class DefaultOrderService implements OrderService {
         this.orderRepository = orderRepository;
     }
 
-
     @Override
     public Order createOrder(Customer customer) {
-
-        if(!customer.hasEnoughBalance()) {
-            throw new NotEnoughFundsException("Not enough funds.");
-        }
-
-        if(!customer.hasOrderItemsInCart()) {
-            throw new IllegalStateException("Cart cannot be empty");
-        }
-
+        checkIfOrderIsPossible(customer);
         List<OrderItem> orderItems = customer.getOrderItems();
-
-        Order newOrder = Order.builder()
-                .customer(customer)
-                .price(customer.getCartPrice())
-                .timestampCreated(LocalDateTime.now())
-                .orderItems(orderItems)
-                .build();
-
+        Order newOrder = buildNewOrder(customer, orderItems);
         orderItems.forEach(orderItem -> orderItem.setOrder(newOrder));
-        customer.addOrder(newOrder);
-        customer.pay(newOrder.getPrice());
+        updateCustomerData(customer, newOrder);
 
         customerRepository.save(customer);
         return orderRepository.save(newOrder);
@@ -58,7 +40,36 @@ public class DefaultOrderService implements OrderService {
     @Override
     public Order getOrderById(Long id) {
         return orderRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("No order with id: " + id + " found"));
+                .orElseThrow(() -> new EntityNotFoundException("Order with ID " + id + " doesn't exist"));
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return orderRepository.existsById(id);
+    }
+
+    private void checkIfOrderIsPossible(Customer customer) {
+        if(customer.hasLowBalance()) {
+            throw new NotEnoughFundsException("Not enough funds.");
+        }
+
+        if(customer.hasEmptyShoppingCart()) {
+            throw new EmptyShoppingCartException("Cannot create order - shopping cart is empty");
+        }
+    }
+
+    private Order buildNewOrder(Customer customer, List<OrderItem> orderItems) {
+        return Order.builder()
+                .price(customer.getShoppingCartPrice())
+                .timestampCreated(LocalDateTime.now())
+                .customer(customer)
+                .orderItems(orderItems)
+                .build();
+    }
+
+    private void updateCustomerData(Customer customer, Order newOrder) {
+        customer.addOrder(newOrder);
+        customer.pay(newOrder.getPrice());
     }
 
 }

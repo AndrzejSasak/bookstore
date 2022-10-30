@@ -22,7 +22,6 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "PRICE")
     private BigDecimal price;
 
     @Column(name = "TIMESTAMP_CREATED")
