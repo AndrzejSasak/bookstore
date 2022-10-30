@@ -20,21 +20,25 @@ public class ShoppingCart {
 
     public void updateCart(Book book, int amount) {
         OrderItem orderItem = new OrderItem(book, amount);
+
         if(orderItem.getAmount() == 0) {
             removeFromOrderItems(orderItem.getBook());
         } else {
-            if(containsFood(orderItem.getBook())) {
-                removeFromOrderItems(orderItem.getBook());
-            }
-            orderItems.add(orderItem);
-            price = price.add(orderItem.getPrice());
+            updateOrderItems(orderItem);
         }
     }
 
+    private void updateOrderItems(OrderItem orderItem) {
+        if(containsBook(orderItem.getBook())) {
+            removeFromOrderItems(orderItem.getBook());
+        }
+
+        orderItems.add(orderItem);
+        price = price.add(orderItem.getPrice());
+    }
+
     private void removeFromOrderItems(Book book) {
-        Optional<OrderItem> itemToRemove = orderItems.stream()
-                .filter(orderItem -> orderItem.getBook().equals(book))
-                .findFirst();
+        Optional<OrderItem> itemToRemove = getItemToRemove(book);
 
         if(itemToRemove.isPresent()) {
             OrderItem item = itemToRemove.get();
@@ -44,7 +48,13 @@ public class ShoppingCart {
 
     }
 
-    private boolean containsFood(Book book) {
+    private Optional<OrderItem> getItemToRemove(Book book) {
+        return orderItems.stream()
+                .filter(orderItem -> orderItem.getBook().equals(book))
+                .findFirst();
+    }
+
+    private boolean containsBook(Book book) {
         return orderItems.stream()
                 .map(OrderItem::getBook)
                 .toList()

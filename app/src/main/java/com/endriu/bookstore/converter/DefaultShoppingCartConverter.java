@@ -5,11 +5,11 @@ import com.endriu.bookstore.model.ShoppingCartModel;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DefaultCartConverter implements CartConverter {
+public class DefaultShoppingCartConverter implements ShoppingCartConverter {
 
     private final OrderItemConverter orderItemConverter;
 
-    public DefaultCartConverter(OrderItemConverter orderItemConverter) {
+    public DefaultShoppingCartConverter(OrderItemConverter orderItemConverter) {
         this.orderItemConverter = orderItemConverter;
     }
 
