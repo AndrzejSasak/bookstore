@@ -12,7 +12,6 @@ public class DefaultBookService implements BookService {
 
     private final BookRepository bookRepository;
 
-    @Autowired
     public DefaultBookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }

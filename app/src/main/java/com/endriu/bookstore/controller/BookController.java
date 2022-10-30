@@ -17,7 +17,6 @@ public class BookController implements BookserviceApi {
     private final BookService bookService;
     private final BookConverter bookConverter;
 
-    @Autowired
     public BookController(BookService bookService, BookConverter bookConverter) {
         this.bookService = bookService;
         this.bookConverter = bookConverter;
@@ -25,9 +24,11 @@ public class BookController implements BookserviceApi {
 
     @Override
     public ResponseEntity<List<BookModel>> bookserviceBooksGet() {
-        List<BookModel> bookModelList = bookService.getAllBooks().stream()
-                .map(bookConverter::convertToBookModel).toList();
+        return new ResponseEntity<>(getBookModelList(), HttpStatus.OK);
+    }
 
-        return new ResponseEntity<>(bookModelList, HttpStatus.OK);
+    private List<BookModel> getBookModelList() {
+        return bookService.getAllBooks().stream()
+                .map(bookConverter::convertToBookModel).toList();
     }
 }
