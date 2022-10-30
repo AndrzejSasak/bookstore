@@ -7,3 +7,10 @@ Technologies used:
 - OpenAPI specification made with Swagger
 - Spring Data JPA with Hibernate
 - Spring Security for authenticating users and encrypting passwords
+
+## Docker
+
+In order to pull docker image of this app, run:
+```
+docker pull andrzejsasak/bookstore
+```
