@@ -27,10 +27,8 @@ public class OrderItem {
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     private Order order;
 
-    @Column(name = "AMOUNT")
     private int amount;
 
-    @Column(name = "PRICE")
     private BigDecimal price;
 
     @ManyToOne

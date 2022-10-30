@@ -2,7 +2,6 @@ package com.endriu.bookstore.converter;
 
 import com.endriu.bookstore.domain.OrderItem;
 import com.endriu.bookstore.model.OrderItemModel;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -10,7 +9,6 @@ public class DefaultOrderItemConverter implements OrderItemConverter {
 
     private final BookConverter bookConverter;
 
-    @Autowired
     public DefaultOrderItemConverter(BookConverter bookConverter) {
         this.bookConverter = bookConverter;
     }
