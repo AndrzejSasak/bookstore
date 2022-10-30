@@ -1,4 +1,4 @@
-package com.endriu.bookstore.service;
+package com.endriu.bookstore.service.exception;
 
 public class NotEnoughFundsException extends RuntimeException {
 
