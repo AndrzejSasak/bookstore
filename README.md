@@ -14,3 +14,4 @@ In order to pull docker image of this app, run:
 ```
 docker pull andrzejsasak/bookstore
 ```
+(no database image included)
