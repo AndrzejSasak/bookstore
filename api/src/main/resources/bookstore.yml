@@ -257,4 +257,3 @@ components:
           description: "price of shopping cart"
         orderItemModels:
           $ref: "#/components/schemas/OrderItemNoIdModels"
-

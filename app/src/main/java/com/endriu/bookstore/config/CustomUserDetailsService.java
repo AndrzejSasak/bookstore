@@ -2,6 +2,7 @@ package com.endriu.bookstore.config;
 
 import com.endriu.bookstore.domain.Customer;
 import com.endriu.bookstore.repository.CustomerRepository;
+import com.endriu.bookstore.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -16,16 +17,16 @@ import java.util.Optional;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final CustomerRepository customerRepository;
+    private final CustomerService customerService;
 
     @Autowired
-    public CustomUserDetailsService(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
+    public CustomUserDetailsService(CustomerService customerService) {
+        this.customerService = customerService;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Customer> customerOptional = customerRepository.findCustomerByEmail(username);
+        Optional<Customer> customerOptional = Optional.ofNullable(customerService.findCustomerByEmail(username));
 
         if(customerOptional.isEmpty()) {
             throw new UsernameNotFoundException("Customer with this username not found");
