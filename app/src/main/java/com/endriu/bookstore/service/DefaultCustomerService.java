@@ -4,7 +4,6 @@ package com.endriu.bookstore.service;
 import com.endriu.bookstore.domain.Customer;
 import com.endriu.bookstore.repository.CustomerRepository;
 import com.endriu.bookstore.service.exception.CustomerNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
