@@ -21,16 +21,12 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "EMAIL")
     private String email;
 
-    @Column(name = "PASSWORD")
     private String password;
 
-    @Column(name = "NAME")
     private String name;
 
-    @Column(name = "BALANCE")
     private BigDecimal balance;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
@@ -39,11 +35,11 @@ public class Customer {
     @Transient
     private ShoppingCart shoppingCart;
 
-    public boolean hasOrderItemsInCart() {
-        return !this.getShoppingCart().getOrderItems().isEmpty();
+    public boolean hasEmptyShoppingCart() {
+        return this.getShoppingCart().getOrderItems().isEmpty();
     }
 
-    public BigDecimal getCartPrice() {
+    public BigDecimal getShoppingCartPrice() {
         return this.shoppingCart.getPrice();
     }
 
@@ -59,8 +55,8 @@ public class Customer {
         this.orders.add(order);
     }
 
-    public boolean hasEnoughBalance() {
-        return !(this.balance.subtract(this.shoppingCart.getPrice()).compareTo(BigDecimal.ZERO) < 0);
+    public boolean hasLowBalance() {
+        return this.balance.subtract(this.shoppingCart.getPrice()).compareTo(BigDecimal.ZERO) < 0;
     }
 
     public void pay(BigDecimal cost) {
